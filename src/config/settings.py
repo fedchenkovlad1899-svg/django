@@ -14,6 +14,8 @@ from pathlib import Path
 import environ
 import os
 
+from django.conf.global_settings import AUTH_USER_MODEL
+
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
@@ -55,7 +57,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'task_manager'
+    'django_extensions',
+    'task_manager',
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -102,7 +106,7 @@ DATABASES = {
 
     }
 }
-
+AUTH_USER_MODEL = "account.User"
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators

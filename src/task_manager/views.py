@@ -1,9 +1,10 @@
 from django.shortcuts import render
 
 from django.http import HttpResponse
+from task_manager.models import Tasks
 
 
-def index(request):
+def tasks(request):
 
     return render(request,"home.html")
 
@@ -34,7 +35,7 @@ def tasks(request):
     ]
     context = {
 
-        'tasks': tasks,
+        'tasks': Tasks.objects.all()
 
     }
 

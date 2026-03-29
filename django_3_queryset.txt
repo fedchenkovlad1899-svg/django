@@ -1,0 +1,40 @@
+1) Создать модель задач, которую мы создали на занятии.
+Заполнить модель 10 различными задачами с разным приоритетом.
+tasks = Tasks(name="task_8",priority = 3)
+tasks.save()
+
+2) Получить все задачи из базы данных.
+ tasks = Tasks.objects.all()
+ tasks
+
+3) Вывести список задач, отображая только их название и статус.
+Tasks.objects.values("name","status")
+
+4) Найти все задачи со статусом created или started.
+Tasks.objects.filter(Q(status="created")|Q(status="started"))
+
+5) Найти все задачи с приоритетом 5.
+Tasks.objects.filter(priority = 5)
+
+6) Получить список задач, которые были переоткрыты
+Tasks.objects.filter(is_reopened =True)
+
+7) Отсортировать все задачи по приоритету (по убыванию), затем по дате создания (сначала новые).
+ Tasks.objects.all().order_by("-priority")
+ Tasks.objects.all().order_by("-created_at")
+
+8) Подсчитать общее количество задач в системе.
+Tasks.objects.all().count()
+
+9) Найти самую последнюю созданную задачу.
+Tasks.objects.all().order_by("-created_at")[:1]
+
+
+10) Получить все задачи, которые находятся в работе (исключить completed и canceled).
+ Tasks.objects.exclude(status__in=["completed", "canceled"])
+
+
+11) Найти все задачи, у которых есть описание.
+ Tasks.objects.filter(description__isnull=False)
+
+
