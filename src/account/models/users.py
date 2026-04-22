@@ -27,3 +27,22 @@ class User(AbstractBaseUser, PermissionsMixin,BaseModel):
         verbose_name= "User"
         verbose_name_plural= "Users"
 
+class Owners(User):
+
+    class Meta:
+        db_table = "owners"
+        verbose_name= "Owner"
+        verbose_name_plural= "Owners"
+
+
+class Employees(User):
+    work_time_hours = models.PositiveSmallIntegerField()
+    worktime_timezone = models.SmallIntegerField()
+
+    class Meta:
+        db_table = "employees"
+        verbose_name= "Employee"
+        verbose_name_plural= "Employees"
+
+
+

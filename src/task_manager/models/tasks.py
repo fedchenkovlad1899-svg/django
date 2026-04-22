@@ -46,6 +46,7 @@ class Tasks(BaseModel):
         related_name = "tasks",
         on_delete=models.CASCADE,
         null=True,
+        blank=True,
     )
 
     assignee = models.ForeignKey(
@@ -65,3 +66,13 @@ class Tasks(BaseModel):
 
     def __str__(self):
         return self.name
+
+class EducationTasks(Tasks):
+    class CompletedTasksManager(models.Manager):
+        def get_queryset(self):
+            return Tasks.objects.filter(status=TaskStatus.COMPLETED)
+
+    objects = models.Manager()
+    completed = CompletedTasksManager()
+    class Meta:
+        proxy = True

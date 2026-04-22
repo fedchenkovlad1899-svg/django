@@ -1,7 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+
 
 from django.http import HttpResponse
 from task_manager.models import Tasks
+
+
+from account.models import User
 
 
 def tasks(request):
@@ -19,7 +23,7 @@ def users(request):
     ]
     context = {
 
-        'users': users,
+        'users': users #Tasks.objects.filter(assignee_id=2),
 
     }
 
@@ -35,8 +39,20 @@ def tasks(request):
     ]
     context = {
 
-        'tasks': Tasks.objects.all()
+        'tasks': Tasks.objects.select_related("assignee").prefetch_related("tags","comments").all()
 
     }
 
     return render(request, "tasks.html",context=context)
+
+
+def urequest(request, user_id):
+
+
+    user_qs = User.objects.prefetch_related('comments__task').filter(id=user_id)
+    user = get_object_or_404(user_qs, id=user_id)
+
+    context = {
+        'user': user,
+    }
+    return render (request,"user_report.html", context=context)
