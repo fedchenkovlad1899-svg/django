@@ -15,6 +15,16 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'users' %}">Users</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'create_task' %}">Create task</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link" href="{% url 'create_comment' %}">Create comment</a>
+        </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'user_report' user.id %}">User_report</a>
+        </li>
       </ul>
     </div>
   </div>

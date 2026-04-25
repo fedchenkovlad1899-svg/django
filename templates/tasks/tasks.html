@@ -30,9 +30,11 @@
   <thead>
     <tr>
       <th scope="col">name</th>
-      <th scope="col">description</th>
+      <th scope="col">assignee</th>
+      <th scope="col">tags</th>
       <th scope="col">status</th>
       <th scope="col">priority</th>
+      <th scope="col">comments</th>
     </tr>
   </thead>
 
@@ -40,13 +42,20 @@
   {% for task in tasks %}
     <tr>
       <td>{{ task.name }}</td>
-      {% if task.description is not None %}
-         <td>{{ task.description }}</td>
-      {% else  %}
-        <td></td>
-      {% endif  %}
+        <td>{{ task.assignee.email }}</td>
+
+<td>
+      {% for tag in task.tags.all %}
+         {{ tag.name }}
+      {% endfor %}
+</td>
       <td>{{ task.status }}</td>
       <td>{{ task.priority }}</td>
+<td>
+      {% for comment in task.comments.all %}
+    <p>{{ comment.message }}</p>
+      {% endfor %}
+</td>
     </tr>
   {% endfor %}
   </tbody>
