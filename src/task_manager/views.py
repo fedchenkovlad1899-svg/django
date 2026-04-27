@@ -7,11 +7,13 @@ from task_manager.models import Tasks
 from account.models import User
 
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.db import transaction
 from task_manager.forms import TaskForm,CommentForm
 from django.urls import reverse
 from django.core.signals import request_finished
 from django.dispatch import receiver
-
+from django.db.models import F
 
 
 
