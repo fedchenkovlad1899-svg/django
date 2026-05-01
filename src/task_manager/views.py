@@ -2,19 +2,19 @@
 from django.shortcuts import render, get_object_or_404
 
 from django.http import HttpResponse
-from task_manager.models import Tasks
+from task_manager.models import Tasks,Attachments,Comments
 
 from account.models import User
 
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.db import transaction
-from task_manager.forms import TaskForm,CommentForm
+from task_manager.forms import TaskForm,CommentForm,AttachmentsForm
 from django.urls import reverse
 from django.core.signals import request_finished
 from django.dispatch import receiver
 from django.db.models import F
-
+from django.core.paginator import Paginator
 
 
 
@@ -51,21 +51,13 @@ def users(request):
 
 
 def tasks(request):
+    tasks_qs = Tasks.objects.task_optimization()
+    paginator = Paginator(tasks_qs, 10)
+    page_number = request.GET.get('page')
+    page_objc = paginator.get_page(page_number)
+    context = {'tasks': page_objc, 'page_obj': page_objc}
 
-    tasks = [
-        {"task_name": "Fix login bug", "status": "in progress", "priority": "high"},
-        {"task_name": "Create navbar", "status": "done", "priority": "medium"},
-        {"task_name": "Write tests", "status": "todo", "priority": "high"},
-        {"task_name": "Update documentation", "status": "todo", "priority": "low"},
-        {"task_name": "Deploy project", "status": "in progress", "priority": "medium"}
-    ]
-    context = {
-
-        'tasks': Tasks.objects.select_related("assignee").prefetch_related("tags","comments").all()
-
-    }
-
-    return render(request, "tasks.html",context=context)
+    return render(request, "tasks.html", context=context)
 
 
 def urequest(request, user_id):
@@ -79,6 +71,19 @@ def urequest(request, user_id):
     }
     return render (request,"user_report.html", context=context)
 
+def attachments(request):
+
+    attachments_qs = Attachments.objects.all().order_by('id')
+    paginator = Paginator(attachments_qs, 10)
+    page_number = request.GET.get('page')
+    page_objc = paginator.get_page(page_number)
+
+    context = {
+        'attachments': page_objc,
+        'page_obj': page_objc
+    }
+
+    return render (request,"attachments.html", context=context)
 
 
 def create_task_form(request):
@@ -126,3 +131,18 @@ def create_comment_form(request):
         form = CommentForm()
 
     return render(request, "comment_form.html", {"form": form})
+
+def create_attachment(request):
+
+    if request.method == "POST":
+
+        form = AttachmentsForm(request.POST,request.FILES)
+
+        if form.is_valid():
+
+            form.save()
+            return HttpResponseRedirect(reverse("tasks"))
+    else:
+        form = AttachmentsForm()
+
+    return render(request, "task_attachment.html", {"form": form})

@@ -154,6 +154,24 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR.parent / "static/images",
 ]
+STATIC_ROOT = BASE_DIR.parent / "static"
+
+# media
+
+MEDIA_URL =  "/media/"
+MEDIA_ROOT = "media_files"
+
+#storages
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
