@@ -15,7 +15,8 @@ from django.core.signals import request_finished
 from django.dispatch import receiver
 from django.db.models import F
 from django.core.paginator import Paginator
-
+from django.views.decorators.cache import cache_page
+from django.core.cache import caches
 
 
 
@@ -49,8 +50,10 @@ def users(request):
 # def...
 # print("Request finished!")
 
-
+@cache_page(1800,cache='default')
 def tasks(request):
+
+
     tasks_qs = Tasks.objects.task_optimization()
     paginator = Paginator(tasks_qs, 10)
     page_number = request.GET.get('page')
@@ -105,6 +108,7 @@ def create_task_form(request):
             # )
 
             form.save()
+            caches["default"].clear()
             return HttpResponseRedirect(reverse("tasks"))
     else:
         form = TaskForm()
