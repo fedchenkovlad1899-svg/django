@@ -4,31 +4,30 @@
 
 
 
-{% load cache %}
-{% cache 1200 users_table using="filesystem_cache" %}
+
 
 <table class="table">
-  <thead>
+ <thead>
     <tr>
+      <th scope="col">Id</th>
       <th scope="col">Name</th>
-      <th scope="col">Age</th>
-      <th scope="col">Photo</th>
+      <th scope="col">email</th>
+      <th scope="col">phone</th>
     </tr>
   </thead>
   <tbody>
-  {%for user in users%}
+  {% for user in users %}
     <tr>
-      <td>{{ user.name }}</td>
-      <td>{{ user.age }}</td>
-      <td>
-        <img src="{% static user.photo %}" alt="{{ user.name }}" width="50">
-      </td>
+      <td>{{ user.id }}</td>
+      <td>{{ user.username }}</td>
+      <td>{{ user.email}}</td>
+      <td>{{ user.phone}}</td>
     </tr>
     {% endfor %}
 
   </tbody>
 </table>
 
-{% endcache %}
+
 
 {% endblock %}
