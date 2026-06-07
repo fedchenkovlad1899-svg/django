@@ -1,5 +1,5 @@
 
-from django.urls import path
+from django.urls import path,include
 from task_manager.views import TasksView, HomeTemplateView, TasksView, UserListView, TaskFormView,CommentFormView,AttachmentsFormView,AttachmentsView
 from .views import UserReportView
 
@@ -14,7 +14,7 @@ urlpatterns = [
     path('comment/create',CommentFormView.as_view(), name = "create_comment"),
     path("create_attachment", AttachmentsFormView.as_view(), name="create_attachment"),
     path("attachments", AttachmentsView.as_view(), name="attachments"),
-
+    path("api/", include("task_manager.v1.urls")),
 
 
 ]

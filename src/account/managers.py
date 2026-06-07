@@ -1,6 +1,15 @@
 from django.contrib.auth.base_user import BaseUserManager
-
+from django.db import models
 from django.contrib.auth.hashers import make_password
+
+class UserQuerySet(models.QuerySet):
+    pass
+
+
+class TaskManager(models.Manager):
+    def get_queryset(self):
+        return UserQuerySet(self.model, using=self._db)
+
 
 
 class UserManager(BaseUserManager):

@@ -137,3 +137,6 @@ static/images
 
 # Cache file
 cache
+
+postman
+.postman
