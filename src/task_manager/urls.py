@@ -1,17 +1,20 @@
 
-from django.urls import path
-from task_manager.views import tasks, home, tasks, users, create_task_form,create_comment_form
-from .views import urequest
+from django.urls import path,include
+from task_manager.views import TasksView, HomeTemplateView, TasksView, UserListView, TaskFormView,CommentFormView,AttachmentsFormView,AttachmentsView
+from .views import UserReportView
 
 
 urlpatterns = [
-    path('', tasks, name = "tasks"),
-    path('home', home, name = "home"),
-    path('tasks', tasks, name = "tasks"),
-    path('users', users, name = "users"),
-    path('users/<int:user_id>/', urequest, name='user_report'),
-    path('create',create_task_form, name = "create_task"),
-    path('comment/create',create_comment_form, name = "create_comment"),
+    path('', TasksView.as_view(), name = "tasks"),
+    path('home', HomeTemplateView.as_view(), name = "home"),
+    path('tasks', TasksView.as_view(), name = "tasks"),
+    path('users', UserListView.as_view(), name = "users"),
+    path('users/<int:user_id>/', UserReportView.as_view(), name='user_report'),
+    path('create',TaskFormView.as_view(), name = "create_task"),
+    path('comment/create',CommentFormView.as_view(), name = "create_comment"),
+    path("create_attachment", AttachmentsFormView.as_view(), name="create_attachment"),
+    path("attachments", AttachmentsView.as_view(), name="attachments"),
+    path("api/", include("task_manager.v1.urls")),
 
 
 ]

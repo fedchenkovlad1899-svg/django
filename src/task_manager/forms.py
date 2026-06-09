@@ -71,5 +71,10 @@ class CommentForm(forms.ModelForm):
         }
         widgets = {
             "message": Textarea(attrs={"cols": 50, "rows": 5}),
-            "user": forms.TextInput(attrs={'class': 'form-control custom-input'})
+            #"user": forms.TextInput(attrs={'class': 'form-control custom-input'})
         }
+
+class AttachmentsForm(forms.ModelForm):
+    class Meta:
+        model = Attachments
+        fields = ["name","photo","task","file" ]

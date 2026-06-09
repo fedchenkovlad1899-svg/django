@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.utils.safestring import mark_safe
 
 from task_manager.models.tasks import TaskStatus
-
+from django.utils.html import format_html
 
 # inline
 class CommentInline(admin.TabularInline):
@@ -140,11 +140,25 @@ class ProjectAdmin(admin.ModelAdmin):
     actions = ('make_admin',)
 
 
+class AttachmentsAdmin(admin.ModelAdmin):
+    list_display = ("name","task","display_photo","photo","file","preview")
+    @admin.display(description="Отображение картинки")
+    def display_photo(self, instance):
+        if instance.photo:
+            return mark_safe(f'<img src={ instance.photo.url } width=50/>')
+
+    @admin.display(description="Превью ")
+    def preview(self,obj):
+        if obj.file:
+            return format_html('<a href="{}">Открыть файл</a>', obj.file.url)
+        return "—"
+
+
 admin.site.register(Tasks,TaskAdmin)
 admin.site.register(Tags)
 #admin.site.register(Projects)
 admin.site.register(ProjectsDetails)
 admin.site.register(Comments)
-admin.site.register(Attachments)
+admin.site.register(Attachments,AttachmentsAdmin)
 
 # Register your models here.

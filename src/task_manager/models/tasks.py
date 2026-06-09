@@ -2,7 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 from config.models import BaseModel
-
+from task_manager.managers import TaskManager
 
 class TaskStatus(models.TextChoices):
     CREATED = 'created'
@@ -56,7 +56,7 @@ class Tasks(BaseModel):
         null=True,
         blank=True,
     )
-
+    objects = TaskManager()
 
     class Meta:
         ordering = ['-priority','-created_at']

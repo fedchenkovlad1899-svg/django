@@ -1,0 +1,65 @@
+Задание:
+1.	Подсчитать количество задач по каждому статусу. 
+
+Tasks.objects.values("status").annotate(Count('id'))
+
+
+2.	Найти пользователя (assignee) с наибольшим количеством задач.
+ 
+ User.objects.annotate(task_count=Count('tasks')).order_by('-task_count').first()
+
+
+3.	Вывести список задач с количеством комментариев у каждой. 
+
+Tasks.objects.annotate(comment_count=Count('comments')).values('name','comment_count')
+
+
+4.	Найти задачи, у которых больше 3 комментариев. 
+
+Tasks.objects.annotate(comment_count=Count('comments')).values('name','comment_count').filter(comment_count__gte=3)
+
+
+5.	Посчитать средний приоритет задач для каждого пользователя. 
+
+ User.objects.values("email").annotate(Avg("tasks__priority"))
+
+
+6.	Найти сумму приоритетов задач по каждому тегу. 
+
+Tags.objects.values('name').annotate(Sum("tasks__priority"))
+
+
+7.	Найти задачи, у которых количество комментариев больше, чем количество тегов.
+
+ Tasks.objects.annotate(comment_count=Count('comments'),tag_count=Count('tags')).values('name','comment_count','tag_count').filter(comment_count__gt=F('tag_count'))
+
+
+8.	Найти топ-3 пользователей по количеству комментариев в их задачах.
+
+ User.objects.annotate(comment_count=Count('tasks__comments')).order_by('-comment_count')[:3]
+
+ 
+9.	Выполнить raw SQL-запрос для получения задач с максимальным количеством комментариев.
+ tasks = Tasks.objects.raw("""
+          SELECT tasks.* ,
+                COUNT("comments"."id") AS "num_comments"
+           FROM "tasks"
+           LEFT OUTER JOIN "comments"
+             ON ("tasks"."id" = "comments"."task_id")
+          GROUP BY "tasks"."id"
+          ORDER BY num_comments DESC
+          LIMIT 1
+         """)
+
+for task in tasks:
+         print(task.name)
+
+ 
+10.	Найти задачи, у которых количество комментариев больше 5 и при этом их priority выше среднего по всем задачам.
+
+avg_priority = Tasks.objects.aggregate(Avg('priority'))['priority__avg']
+Tasks.objects.annotate(comments_count=Count('comments')).filter(comments_count__gt=5, priority__gt=avg_priority)
+
+11.	*Реализовать создание задачи и нескольких комментариев в одной транзакции (с откатом при ошибке). 
+12.	*Получить задачу с блокировкой строки и изменить её статус (использовать select_for_update). 
+
