@@ -22,7 +22,8 @@ from django.views import View
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormView, CreateView
 from django.urls import reverse_lazy
-
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 
 
 
@@ -35,8 +36,10 @@ from django.urls import reverse_lazy
 
 # def home(request):
 #     return render(request, "home.html")
-class HomeTemplateView(TemplateView):
+class HomeTemplateView(LoginRequiredMixin,PermissionRequiredMixin,TemplateView):
     template_name = "home.html"
+    login_url = "/admin/login/"
+    permission_required = 'task_manager.view_home'
 
 # def users(request):
 #     context = {
@@ -44,9 +47,11 @@ class HomeTemplateView(TemplateView):
 #     }
 #     return render(request, "users.html", context=context)
 
-class UserListView(ListView):
+class UserListView(LoginRequiredMixin,PermissionRequiredMixin,ListView):
     model = User
     template_name = "users.html"
+    login_url = "/admin/login/"
+    permission_required = 'task_manager.view_users'
     queryset = User.objects.all()
 
     def get_context_data(self, **kwargs):
@@ -63,6 +68,7 @@ class UserListView(ListView):
 # def...
 # print("Request finished!")
 
+# @permission_required("task_manager.view_task")
 # @cache_page(1800,cache='default')
 # def tasks(request):
 #
@@ -76,8 +82,11 @@ class UserListView(ListView):
 #     return render(request, "tasks.html", context=context)
 
 
-class TasksView(ListView):
+
+class TasksView(LoginRequiredMixin,PermissionRequiredMixin,ListView):
     template_name = "tasks.html"
+    login_url = "/admin/login/"
+    permission_required = 'task_manager.view_task'
     model = Tasks
     paginate_by = 50
     paginator_class = Paginator
@@ -105,9 +114,11 @@ class TasksView(ListView):
 
 
 
-class UserReportView(DetailView):
+class UserReportView(LoginRequiredMixin,PermissionRequiredMixin,DetailView):
     model = User
     template_name = "user_report.html"
+    login_url = "/admin/login/"
+    permission_required = 'task_manager.view_user_report'
     context_object_name = "user"
     pk_url_kwarg = "user_id"
 
@@ -130,8 +141,10 @@ class UserReportView(DetailView):
 #
 #     return render (request,"attachments.html", context=context)
 
-class AttachmentsView(ListView):
+class AttachmentsView(LoginRequiredMixin,PermissionRequiredMixin,ListView):
     template_name = "attachments.html"
+    login_url = "/admin/login/"
+    permission_required = 'task_manager.view_attachments'
     model = Attachments
     context_object_name = "attachment"
     paginate_by = 10
@@ -173,8 +186,10 @@ class AttachmentsView(ListView):
 #
 #     return render(request, "task_form.html", {"form": form})
 
-class TaskFormView(CreateView):
+class TaskFormView(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
     template_name = "task_form.html"
+    login_url = "/admin/login/"
+    permission_required = 'task_manager.view_task_form'
     form_class = TaskForm
     success_url = reverse_lazy("tasks")
 
@@ -198,8 +213,10 @@ class TaskFormView(CreateView):
 #
 #     return render(request, "comment_form.html", {"form": form})
 
-class CommentFormView(CreateView):
+class CommentFormView(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
     template_name = "comment_form.html"
+    login_url = "/admin/login/"
+    permission_required = 'task_manager.view_comment_form'
     form_class = CommentForm
     success_url = reverse_lazy("tasks")
 
@@ -218,8 +235,10 @@ class CommentFormView(CreateView):
 #
 #     return render(request, "task_attachment.html", {"form": form})
 
-class AttachmentsFormView(CreateView):
+class AttachmentsFormView(LoginRequiredMixin,PermissionRequiredMixin,CreateView):
     template_name = "task_attachment.html"
+    login_url = "/admin/login/"
+    permission_required = 'task_manager.view_task_attachment'
     model = Attachments
     form_class = AttachmentsForm
     success_url = reverse_lazy("tasks")
