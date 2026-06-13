@@ -4,6 +4,7 @@ from rest_framework import serializers
 from account.models import User
 from task_manager.models import Tasks, Projects, Comments
 from task_manager.v1.serializers.comment import CommentSerializer
+import django_filters
 
 
 # class TaskSerializer(serializers.Serializer):
@@ -29,6 +30,26 @@ from task_manager.v1.serializers.comment import CommentSerializer
 #         instance.save()
 #         return instance
 
+
+
+
+class TaskQueryFilterSerializer(django_filters.FilterSet):
+    name__icontains = django_filters.CharFilter(field_name='name',lookup_expr='icontains')
+    description__icontains = django_filters.CharFilter(field_name='description', lookup_expr='icontains')
+    priority__gt = django_filters.NumberFilter(field_name='priority', lookup_expr='gt')
+    priority__lt = django_filters.NumberFilter(field_name='priority', lookup_expr='lt')
+    created_at__gt = django_filters.DateTimeFilter(field_name='created_at', lookup_expr='gte')
+    created_at__lt = django_filters.DateTimeFilter(field_name='created_at', lookup_expr='lte')
+    ordering = OrderingFilter(
+        fields=(
+            ('priority','priority'),
+            ('created_at','created_at'),
+        )
+    )
+
+    class Meta:
+        model = Tasks
+        fields = ['name', 'status','priority','created_at']
 
 
 class TaskSerializer(serializers.ModelSerializer):

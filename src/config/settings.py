@@ -15,6 +15,7 @@ import environ
 import os
 from datetime import timedelta
 
+
 from django.conf.global_settings import AUTH_USER_MODEL
 
 env = environ.Env(
@@ -66,6 +67,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
+    'django_filters',
 
     'task_manager.apps.TaskManagerConfig',
     'account.apps.AccountConfig',
