@@ -47,7 +47,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["testserver","localhost","127.0.0.1"]
 
 
 # Application definition
@@ -123,6 +123,9 @@ DATABASES = {
         "PASSWORD": env("PG_PASS"),
         "HOST": env("PG_HOST"),
         "PORT": env("PG_PORT"),
+        "TEST": {
+            'NAME': "test_task_tracker_py70",
+        }
 
     }
 }

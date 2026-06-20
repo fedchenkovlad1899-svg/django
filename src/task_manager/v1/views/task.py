@@ -155,7 +155,7 @@ class TaskListApiView(
 ):
     queryset = Tasks.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = [IsAdminUser]
+    # permission_classes = [IsAdminUser]
     pagination_class = CustomPagination
     filterset_class = TaskQueryFilterSerializer
 

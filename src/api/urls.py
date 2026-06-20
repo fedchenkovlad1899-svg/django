@@ -13,12 +13,13 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
 
-    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
-    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('v1/', include("api.v1"), name='task_api'),
+    # path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    # path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-    path('api-token-auth/', views.obtain_auth_token),
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-] + debug_toolbar_urls() + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+    # path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    # path('api-token-auth/', views.obtain_auth_token),
+    # path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+] #+ debug_toolbar_urls() + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

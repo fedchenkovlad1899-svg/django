@@ -6,9 +6,9 @@ class TaskManagerConfig(AppConfig):
     name = 'task_manager'
     verbose_name = 'МЕНЕДЖЕР ЗАДАЧ'
 
-    def ready(self):
-
-        from task_manager.signals import my_test_signal
-
-
-        # post_save.connect(my_test_signal)
+    # def ready(self):
+    #
+    #     from task_manager.signals import my_test_signal
+    #
+    #
+    #     # post_save.connect(my_test_signal)

@@ -7,3 +7,9 @@
 # router.register('tasks', TaskViewSet, basename='tasks')
 # urlpatterns = router.urls
 #
+
+from django.urls import path,include
+
+urlpatterns = [
+    path('tasks/', include("task_manager.v1.urls"), name='task_api'),
+]
