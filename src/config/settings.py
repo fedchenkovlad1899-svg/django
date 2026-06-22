@@ -68,6 +68,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'django_filters',
+    'django_celery_results',
+    'django_celery_beat',
+
 
     'task_manager.apps.TaskManagerConfig',
     'account.apps.AccountConfig',
@@ -255,3 +258,17 @@ SIMPLE_JWT = {
     "SIGNING_KEY": env("SECRET_KEY"),
     "AUTH_HEADER_TYPES": ("JWT",),
 }
+
+#  CELERY
+# CELERY_TIMEZONE = "Belarus/Minsk"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 1800
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+# CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

@@ -29,6 +29,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_not_required
 
+from task_manager.tasks import add
 
 
 # def tasks(request):
@@ -107,15 +108,15 @@ class TasksView(ListView):
 
 
 
-def user_test_validate():
-    import time
-    time.sleep(10)
+def user_test_validate(pk):
+    res = add.delay(pk, pk + 1)
+    print(res)
     return True
 
 
 
 def user_tasks(request,pk):
-    res = user_test_validate()
+    res = user_test_validate(pk)
     print(res)
     return HttpResponse(f"<h1>User </h1>")
 

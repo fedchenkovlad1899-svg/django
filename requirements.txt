@@ -14,4 +14,11 @@ djangorestframework==3.17.1
 drf-spectacular==0.29.0
 Markdown==3.10.2
 djangorestframework_simplejwt==5.5.1
+redis==7.4.0
+celery==5.6.3
+django_celery_results==2.6.0
+flower==2.0.1
+django-celery-beat==2.9.0
+ephem==4.2.1
+
 
