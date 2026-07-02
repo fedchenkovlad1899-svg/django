@@ -1,0 +1,50 @@
+ 2. group1=Group.objects.create(name="group1")
+   group2=Group.objects.create(name="group2")
+
+permission = Permission.objects.get(id=28)
+group1
+group1.permissions.add(permission)
+group2.permissions.add(Permission.objects.get(id=29))
+
+awaw=User.objects.get(email="awaw@awaw.com")
+awaw.groups.add(group1,group2)
+
+
+3. 
+In [1]: user1=User.objects.create_user("user1@user1.com","user1 ")
+In [2]: user1.is_staff = True
+   ...: user1.is_active = True
+   ...: user1.save()
+In [3]: gp=Group.objects.create(name="view and add")
+In [4]: add_task = [
+   ...:     'add_attachments',
+   ...:     'add_projects',
+   ...:     'add_comments',
+   ...:     'add_tags',
+   ...:     'add_tasks'
+   ...: ]
+In [5]: view_task = [
+   ...:     'view_attachments',
+   ...:     'view_projects',
+   ...:     'view_comments',
+   ...:     'view_tags',
+   ...:     'view_tasks'
+   ...: ]
+In [6]: permissions = Permission.objects.filter(codename__in=add_task + view_task)
+In [7]: gp.permissions.add(*permissions)
+In [8]: user1.groups.add(gp)
+
+5.
+
+In [1]: from rest_framework.authtoken.models import Token
+In [2]: user=User.objects.get(id=1)
+In [3]: user
+In [4]: token=Token.objects.create(user=user)
+In [5]: token
+
+
+path('api-token-auth/', views.obtain_auth_token),
+ 
+python src/manage.py drf_create_token -r "user1@user1.com"
+
+

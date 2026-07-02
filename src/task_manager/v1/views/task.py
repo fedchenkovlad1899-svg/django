@@ -1,6 +1,9 @@
 from django.http import HttpResponse, JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAdminUser
+
+from config.pagination import CustomPagination
 from task_manager.models import Tasks
 from task_manager.v1.serializers import TaskSerializer
 from rest_framework import status, mixins, generics
@@ -9,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
 
-from task_manager.v1.serializers.task import TaskUpdateSerializer
+from task_manager.v1.serializers.task import TaskUpdateSerializer,TaskQueryFilterSerializer
 
 # @csrf_exempt
 # def tasks_list(request):
@@ -152,11 +155,32 @@ class TaskListApiView(
 ):
     queryset = Tasks.objects.all()
     serializer_class = TaskSerializer
+    # permission_classes = [IsAdminUser]
+    pagination_class = CustomPagination
+    filterset_class = TaskQueryFilterSerializer
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+
+        # name = self.request.query_params.get('name')
+        # if name is not None:
+        #     self.queryset = self.queryset.filter(name=name)
+        # return self.queryset
+
+        qs = Tasks.objects.all()
+        user = self.request.user
+        return qs.filter(assignee=user)
+
+
 
 
     @extend_schema(
         summary='Get all tasks',
         description='Get all tasks',
+        request=TaskQueryFilterSerializer,
         responses={200: TaskSerializer},
     )
     def get(self, request, *args, **kwargs):
@@ -199,3 +223,60 @@ class TaskDetailApiView(
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+
+from rest_framework import viewsets
+from rest_framework.response import Response
+#
+# @extend_schema(tags=['Task'])
+# class TaskViewSet(
+#     mixins.RetrieveModelMixin,
+#     mixins.UpdateModelMixin,
+#     mixins.DestroyModelMixin,
+#     mixins.ListModelMixin,
+#     mixins.CreateModelMixin,
+#     viewsets.ViewSet
+# ):
+#     """
+#     A simple ViewSet for listing or retrieving users.
+#     """
+#
+#     queryset = Tasks.objects.all()
+#     serializer_class = TaskSerializer
+#     pagination_class = CustomPagination
+#     filterset_class = TaskQueryFilterSerializer
+#     filter_queryset = None
+#
+#
+#
+#     # @extend_schema(
+#     #     summary='Get all tasks',
+#     #     description='Get all tasks',
+#     #     request=TaskQueryFilterSerializer,
+#     #     responses={200: TaskSerializer},
+#     # )
+#     def list(self, request, *args, **kwargs):
+#
+#         return super().list(request, *args, **kwargs)
+#
+#
+#     @extend_schema(
+#         summary='Create task',
+#         description='Create task',
+#         request=TaskSerializer,
+#         responses={201: TaskSerializer},
+#     )
+#     def create(self, request, *args, **kwargs):
+#         return super().create(request, *args, **kwargs)
+#
+#     def retrieve(self, request, *args, **kwargs):
+#         return super().retrieve(request, *args, **kwargs)
+#
+#     def update(self, request, *args, **kwargs):
+#         return super().update(request, *args, **kwargs)
+#
+#     def destroy(self, request, *args, **kwargs):
+#         return super().destroy(request, *args, **kwargs)
